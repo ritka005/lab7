@@ -115,10 +115,26 @@ def update_data(author_id, book_id, reader_id, order_id):
             cur.execute("SAVEPOINT update_savepoint")
 
             # Обновления авторов, книг, читателей и заказов
-            cur.execute("UPDATE Authors SET name = %s WHERE author_id = %s", ('Михаил Афанасьевич Булгаков', author_id))
-            cur.execute("UPDATE Books SET title = %s WHERE book_id = %s", ('Мастер и Маргарита!', book_id))
-            cur.execute("UPDATE Readers SET full_name = %s WHERE reader_id = %s", ('Дрожкин Александр', reader_id))
-            cur.execute("UPDATE Orders SET status = %s WHERE order_id = %s", ('returned', order_id))
+            # Обновление данных автора
+            cur.execute(
+                "UPDATE Authors SET name = %s, birthdate = %s, nationality = %s, biography = %s WHERE author_id = %s",
+                ('ФИО','1996-11-25','nationality','biography', author_id)
+            )
+            # Обновление данных книги
+            cur.execute(
+                "UPDATE Books SET title = %s, publication_year = %s, genre = %s, page_count = %s, isbn = %s, author_id = %s WHERE book_id = %s",
+                ('title','1990','genre','70','978-5-17-045679-3',author_id, book_id)
+            )
+            # Обновление данных читателя
+            cur.execute(
+                "UPDATE Readers SET full_name = %s, email = %s, phone_number = %s WHERE reader_id = %s",
+                ('full_name','full_name@example.com','89082419855', reader_id)
+            )
+            # Обновление данных заказа
+            cur.execute(
+                "UPDATE Orders SET book_id = %s, reader_id = %s, status = %s WHERE order_id = %s",
+                (book_id,reader_id,'active', order_id)
+            )
 
             conn.commit()
             print("Данные успешно обновлены.")
