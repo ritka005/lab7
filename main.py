@@ -61,7 +61,6 @@ def read_data():
 
         return authors, books, readers, orders
 
-#conn.autocommit = False
 
 def insert_data():
     try:
@@ -105,7 +104,7 @@ def insert_data():
         with conn.cursor() as cur:
             # Откат к точке сохранения
             cur.execute("ROLLBACK TO SAVEPOINT insert_savepoint")
-        # Если вы хотите полностью откатить транзакцию, используйте:
+        # Полный откат
         conn.rollback()
 
 
@@ -118,23 +117,19 @@ def update_data(author_id, book_id, reader_id, order_id):
             # Обновление данных автора
             cur.execute(
                 "UPDATE Authors SET name = %s, birthdate = %s, nationality = %s, biography = %s WHERE author_id = %s",
-                ('ФИО','1996-11-25','nationality','biography', author_id)
-            )
+                ('ФИО','1996-11-25','nationality','biography', author_id))
             # Обновление данных книги
             cur.execute(
                 "UPDATE Books SET title = %s, publication_year = %s, genre = %s, page_count = %s, isbn = %s, author_id = %s WHERE book_id = %s",
-                ('title','1990','genre','70','978-5-17-045679-3',author_id, book_id)
-            )
+                ('title','1990','genre','70','978-5-17-045679-3',author_id, book_id))
             # Обновление данных читателя
             cur.execute(
                 "UPDATE Readers SET full_name = %s, email = %s, phone_number = %s WHERE reader_id = %s",
-                ('full_name','full_name@example.com','89082419855', reader_id)
-            )
+                ('full_name','full_name@example.com','89082419855', reader_id))
             # Обновление данных заказа
             cur.execute(
                 "UPDATE Orders SET book_id = %s, reader_id = %s, status = %s WHERE order_id = %s",
-                (book_id,reader_id,'active', order_id)
-            )
+                (book_id,reader_id,'active', order_id))
 
             conn.commit()
             print("Данные успешно обновлены.")
@@ -175,19 +170,18 @@ def main():
     insert_data()
     read_data()
 
-    author_id = 7
-    book_id = 7
-    reader_id = 7
-    order_id = 7
+    author_id = 8
+    book_id = 8
+    reader_id = 8
+    order_id = 8
     print("Updating data...")
     update_data(author_id, book_id, reader_id, order_id)
     read_data()
 
-
-    author_id = 7
-    book_id = 7
-    reader_id = 7
-    order_id = 7
+    author_id = 8
+    book_id = 8
+    reader_id = 8
+    order_id = 8
     print("Deleting data...")
     delete_data(author_id, book_id, reader_id, order_id)
     read_data()
